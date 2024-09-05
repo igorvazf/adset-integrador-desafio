@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35222.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdSetIntegrador.Data", "AdSetIntegrador.Data\AdSetIntegrador.Data.csproj", "{2BDA3EA0-15D3-47A6-9BBA-3DFAC9D904F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdSetIntegrador.Web", "AdSetIntegrador.Web\AdSetIntegrador.Web.csproj", "{B3A25DAC-EFE9-401A-A09F-96B2879702C8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BDA3EA0-15D3-47A6-9BBA-3DFAC9D904F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BDA3EA0-15D3-47A6-9BBA-3DFAC9D904F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BDA3EA0-15D3-47A6-9BBA-3DFAC9D904F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BDA3EA0-15D3-47A6-9BBA-3DFAC9D904F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3A25DAC-EFE9-401A-A09F-96B2879702C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3A25DAC-EFE9-401A-A09F-96B2879702C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3A25DAC-EFE9-401A-A09F-96B2879702C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3A25DAC-EFE9-401A-A09F-96B2879702C8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {38E12838-E54A-4512-8C9F-82E8896BCF6F}
+	EndGlobalSection
+EndGlobal
