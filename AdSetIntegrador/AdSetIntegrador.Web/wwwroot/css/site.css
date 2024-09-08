@@ -20,3 +20,328 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+.border-bottom-header {
+    border-bottom: 1px solid #cdcdcd !important;
+}
+
+.information {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.information-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.information-line1 {
+    font-family: Tahoma;
+    font-size: 15px;
+    line-height: 19px;
+    color: #87888A;
+    display: block;
+}
+
+.information-total {
+    font-family: Tahoma;
+    font-size: 13px;
+    line-height: 19px;
+    color: #0B72B5;
+}
+
+.information-with-images {
+    font-family: Tahoma;
+    font-size: 13px;
+    line-height: 19px;
+    color: #41A62A;
+}
+
+.information-without-images {
+    font-family: Tahoma;
+    font-size: 13px;
+    line-height: 19px;
+    color: #E2001A;
+    color: rgb(226, 0, 26);
+}
+
+.information-excel {
+    font-family: Tahoma;
+    font-size: 13px;
+    line-height: 20.67px;
+    color: #87888A;
+}
+
+.filter-div {
+    background-color: white;
+    width: fit-content;
+    block-size: fit-content;
+    border-radius: 0 0 10px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px 15px;
+    border-right: 1px solid #cdcdcd;
+    border-left: 1px solid #cdcdcd;
+    border-bottom: 1px solid #cdcdcd;
+    position: relative;
+}
+
+.filter-label {
+    font-family: Tahoma;
+    font-size: 11px;
+    color: #3D3D3F;
+}
+
+.filter-input {
+    padding: 0 0 0 8px;
+    background-color: #F6F6F6;
+    border: 1px solid #c9c9ca;
+    border-radius: 8px / 9px;
+    -moz-border-radius: 8px / 9px;
+    -webkit-border-radius: 8px / 9px;
+}
+
+.filter-dropdown {
+    padding: 0 20px 0 8px;
+    background: #F6F6F6;
+    border: 1px solid #c9c9ca;
+    border-radius: 8px 0px 0px 8px;
+    -moz-border-radius: 8px 0px 0px 8px;
+    -webkit-border-radius: 8px 0px 0px 8px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('/images/dropdown.png');
+    background-repeat: no-repeat;
+    background-position: right 0;
+    background-size: 13px;
+    font-family: Tahoma;
+    color: #58585A;
+}
+
+    .filter-dropdown option {
+        font-size: 12px;
+    }
+
+.image-button {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: none;
+    background: transparent;
+    padding: 0;
+}
+
+    .image-button img {
+        display: block;
+        height: auto;
+    }
+
+.table-head {
+    display: flex;
+    align-items: center;
+}
+
+.table-head-text {
+    font-family: Tahoma;
+    font-size: 12px;
+    color: #58585A;
+    margin: 0 10px 0px 10px;
+}
+
+.table-head-dropdown {
+    padding: 0 20px 0 8px;
+    background: #FFFFFF;
+    border: 1px solid #3D3D3F;
+    border-radius: 10px 0px 0px 10px;
+    -moz-border-radius: 10px 0px 0px 10px;
+    -webkit-border-radius: 10px 0px 0px 10px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('/images/dropdown-green.png');
+    background-repeat: no-repeat;
+    background-position: right 0;
+    background-size: 14px;
+    font-family: Myriad Pro;
+    color: #58585A;
+}
+
+.table-head-div {
+    margin: 0 0 5px 10px;
+    background-color: white;
+    width: fit-content;
+    block-size: fit-content;
+    border-radius: 10px 10px 0 0;
+    padding: 10px 30px;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+    .form-container form {
+        width: 80%;
+        background-color: #F2F2F2;
+        border-radius: 20px;
+        padding: 36px 64px;
+    }
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+    .form-group img {
+        max-width: 100px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+.image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+}
+
+    .checkbox-group label {
+        margin-bottom: 5px;
+    }
+
+.rectangle {
+    width: 27px;
+    height: 130px;
+    background-color: #E7E7E7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 5px 5px 5px;
+}
+
+.vehicle-photo {
+    width: 200px;
+    height: 130px;
+    display: block;
+}
+
+.vehicle-item {
+    display: flex;
+    justify-content: space-between;
+    height: 130px;
+    width: 410px;
+    background-color: #E7E7E7;
+    padding: 15px 0px 0px 15px;
+    margin: 10px 0;
+}
+
+.vehicle-info-brand {
+    margin: 0 0 5px 5px;
+    background-color: white;
+    width: fit-content;
+    block-size: fit-content;
+    border-radius: 10px;
+    padding: 5px 10px 5px 10px;
+}
+
+.vehicle-info-title {
+    font-family: Tahoma;
+    font-weight: bold;
+    font-size: 13px;
+    color: #707173;
+}
+
+.vehicle-info-text {
+    font-family: Tahoma;
+    font-size: 11px;
+    line-height: 15px;
+    margin: 5px;
+}
+
+.vehicle-info-right {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+}
+
+.vehicle-price {
+    background: #f0f0f0;
+    padding: 5px 10px;
+    position: relative;
+    margin: 0;
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
+    padding-left: 40px;
+}
+
+.vehicle-price-text {
+    font-family: Tahoma;
+    font-size: 14px;
+    line-height: 17.21px;
+    color: #40A52B;
+    color: rgb(64, 165, 43);
+}
+
+.additional-info {
+    display: flex;
+    font-size: 13px;
+    color: #40A52B;
+    font-family: Tahoma;
+    text-align: center;
+    margin-left: 10px
+}
+
+.vehicle-edit {
+    background-color: #1085c6;
+    width: fit-content;
+    block-size: fit-content;
+    border-radius: 0 10px 10px 0;
+    padding: 5px 10px 8px 10px;
+}
+
+.integration {
+    flex-direction: column;
+    width: 94px;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+
+.text-integration {
+    font-family: Tahoma;
+    font-size: 10px;
+    color: #707173;
+    color: rgb(112, 113, 115);
+    margin-bottom: 5px;
+}
+
+.checkbox-group-idx {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+    flex-direction: row;
+}
+
+    .checkbox-group-idx input {
+        margin-right: 5px;
+    }
+
+.dotted-hr {
+    border: none;
+    border-top: 1px dotted black;
+    margin: 0;
+}

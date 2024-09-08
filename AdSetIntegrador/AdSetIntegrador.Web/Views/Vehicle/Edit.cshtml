@@ -1,0 +1,115 @@
+﻿@model AdSetIntegrador.Data.Entities.Vehicle
+@using AdSetIntegrador.Data.Entities
+
+@{
+    ViewBag.Title = Model.Id == 0 ? "Criar Veículo" : "Editar Veículo";
+    var isEditMode = Model.Id != 0;
+}
+
+<h2 style="text-align: center; margin-top: 10px;">@ViewBag.Title</h2>
+
+<section class="form-container">
+    <form asp-action="@ViewBag.Action" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="Brand" class="control-label"></label>
+            <input asp-for="Brand" class="form-control" />
+            <span asp-validation-for="Brand" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Model" class="control-label"></label>
+            <input asp-for="Model" class="form-control" />
+            <span asp-validation-for="Model" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Year" class="control-label"></label>
+            <input asp-for="Year" type="number" class="form-control" />
+            <span asp-validation-for="Year" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Plate" class="control-label"></label>
+            <input asp-for="Plate" class="form-control" />
+            <span asp-validation-for="Plate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Mileage" class="control-label"></label>
+            <input asp-for="Mileage" type="number" class="form-control" />
+            <span asp-validation-for="Mileage" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Color" class="control-label"></label>
+            <input asp-for="Color" class="form-control" />
+            <span asp-validation-for="Color" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Price" class="control-label"></label>
+            <input asp-for="Price" type="number" step="0.01" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Opcionais</label>
+            <div class="checkbox-group">
+                @foreach (var optional in ViewBag.OptionalFeatures as List<OptionalFeature>)
+                {
+                    <label>
+                        <input type="checkbox" name="SelectedOptionalFeatures" value="@optional.Id"
+                        @(Model.VehicleOptionalFeatures.Any(vf => vf.OptionalFeatureId == optional.Id) ? "checked" : "") />
+                        @optional.Name
+                    </label>
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Images" class="control-label">Imagens</label>
+            <input type="file" id="Images" name="Images" multiple class="form-control" />
+            <span asp-validation-for="Images" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <div class="image-preview-container" id="imagePreviewContainer">
+            </div>
+        </div>
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.getElementById('Images').addEventListener('change', function (event) {
+            const files = event.target.files;
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            imagePreviewContainer.innerHTML = '';
+            if (files.length > 15) {
+                alert('Você pode adicionar no máximo 15 imagens.');
+                return;
+            }
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    imagePreviewContainer.appendChild(img);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+}
