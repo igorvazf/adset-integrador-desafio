@@ -181,6 +181,14 @@ body {
     block-size: fit-content;
     border-radius: 10px 10px 0 0;
     padding: 10px 30px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.table-head-img {
+    position: absolute;
+    margin-top: 35px;
 }
 
 .form-container {
@@ -344,3 +352,29 @@ body {
     border-top: 1px dotted black;
     margin: 0;
 }
+
+#pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    #pagination button {
+        margin: 0 5px;
+        padding: 5px 10px;
+    }
+
+#page-numbers {
+    display: flex;
+    align-items: center;
+}
+
+    #page-numbers .page-number {
+        margin: 0 5px;
+        cursor: pointer;
+    }
+
+        #page-numbers .page-number:hover {
+            text-decoration: underline;
+        }

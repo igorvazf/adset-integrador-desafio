@@ -77,7 +77,7 @@
             </div>
 
             <div class="information-data">
-                <label class="filter-label" for="Year">Ano Min</label>
+                <label class="filter-label" for="filter-year-min">Ano Min</label>
                 <select class="filter-dropdown" id="filter-year-min">
                     <option value="">Todos</option>
                     @for (int year = 2000; year <= 2024; year++)
@@ -88,7 +88,7 @@
             </div>
 
             <div class="information-data" style="margin-right: 10px;">
-                <label class="filter-label" for="Year">Ano Max</label>
+                <label class="filter-label" for="filter-year-max">Ano Max</label>
                 <select class="filter-dropdown" id="filter-year-max">
                     <option value="">Todos</option>
                     @for (int year = 2000; year <= 2024; year++)
@@ -182,15 +182,17 @@
 
                 <div class="table-head-div">
                     <img src="images/icarros.png" title="iCarros"/>
+                    <img class="table-head-img" src="images/idk.png" />
                 </div>
                 <div class="table-head-div">
                     <img src="images/webmotors.png" title="WebMotors"/>
+                    <img class="table-head-img" src="images/idk.png" />
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div>
+<div id="list-vehicles">
     @if (vehiclesTotal > 0)
     {
         @foreach (var vehicle in Model)
@@ -203,7 +205,7 @@
                 data-price="@vehicle.Price"
                 data-photos="@(vehicle.Images.Count > 0)"
                 data-color="@vehicle.Color"
-                data-optionalfeatures="@string.Join(",", vehicle.VehicleOptionalFeatures.Select(of => of.Id))"
+                data-optionalfeatures="@string.Join(",", vehicle.VehicleOptionalFeatures.Select(of => of.OptionalFeatureId))"
             >
                 <div style="display: flex; align-items: center;">
 
@@ -318,9 +320,97 @@
         </div>
     }
 </div>
+<div id="pagination">
+    <button id="prev-page"><</button>
+    <div id="page-numbers"></div>
+    <button id="next-page">></button>
+</div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
+    document.getElementById('filter-year-min').addEventListener('change', validateYears);
+    document.getElementById('filter-year-max').addEventListener('change', validateYears);
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const vehiclesContainer = document.getElementById('list-vehicles');
+        const itemsPerPageDropdown = document.getElementById('filter-show');
+        const pagination = document.getElementById('pagination');
+        const prevPageButton = document.getElementById('prev-page');
+        const nextPageButton = document.getElementById('next-page');
+        const pageNumbersContainer = document.getElementById('page-numbers');
+
+        let vehicles = Array.from(vehiclesContainer.children);
+        let currentPage = 1;
+        let itemsPerPage = parseInt(itemsPerPageDropdown.value);
+        let totalPages = Math.ceil(vehicles.length / itemsPerPage);
+
+        function updatePage() {
+            vehicles.forEach((vehicle, index) => {
+                vehicle.style.display = (index >= (currentPage - 1) * itemsPerPage && index < currentPage * itemsPerPage) ? 'block' : 'none';
+            });
+
+            updatePaginationControls();
+        }
+
+        function updatePaginationControls() {
+            pageNumbersContainer.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const pageNumber = document.createElement('span');
+                pageNumber.textContent = i;
+                pageNumber.className = 'page-number';
+                pageNumber.style.cursor = 'pointer';
+                if (i === currentPage) {
+                    pageNumber.style.fontWeight = 'bold';
+                }
+                pageNumber.addEventListener('click', () => {
+                    currentPage = i;
+                    updatePage();
+                });
+                pageNumbersContainer.appendChild(pageNumber);
+            }
+
+            prevPageButton.disabled = currentPage === 1;
+            nextPageButton.disabled = currentPage === totalPages;
+        }
+
+        function changeItemsPerPage() {
+            itemsPerPage = parseInt(itemsPerPageDropdown.value);
+            totalPages = Math.ceil(vehicles.length / itemsPerPage);
+            currentPage = 1;
+            updatePage();
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                updatePage();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                updatePage();
+            }
+        }
+
+        itemsPerPageDropdown.addEventListener('change', changeItemsPerPage);
+        prevPageButton.addEventListener('click', prevPage);
+        nextPageButton.addEventListener('click', nextPage);
+
+        updatePage();
+    });
+
+    function validateYears() {
+        const minYear = parseInt(document.getElementById('filter-year-min').value, 10);
+        const maxYear = parseInt(document.getElementById('filter-year-max').value, 10);
+
+        if (!isNaN(minYear) && !isNaN(maxYear) && minYear > maxYear) {
+            alert('O Ano Min não pode ser maior do que o Ano Max.');
+            document.getElementById('filter-year-min').value = '';
+        }
+    }
+
     $("input:checkbox").on('click', function () {
         var $box = $(this);
         if ($box.is(":checked")) {
@@ -341,7 +431,7 @@
         const priceRange = document.getElementById('filter-price').value;
         const color = document.getElementById('filter-color').value.toLowerCase();
         const photosFilter = document.getElementById('filter-photos').value;
-        const optionalFeaturesSelected = Array.from(document.getElementById('filter-optional').selectedOptions).map(option => option.value);
+        const optionalFeature = document.getElementById('filter-optional').value;
 
         document.querySelectorAll('#vehicle-div').forEach(vehicle => {
             const vehiclePlate = vehicle.getAttribute('data-plate').toLowerCase();
@@ -397,7 +487,9 @@
                 }
             }
 
-            //TODO: FILTRO DE OPCIONAIS
+            if (optionalFeature && !vehicleOptionalFeatures.includes(optionalFeature)) {
+                matchesFilters = false;
+            }
 
             vehicle.style.display = matchesFilters ? '' : 'none';
         });
