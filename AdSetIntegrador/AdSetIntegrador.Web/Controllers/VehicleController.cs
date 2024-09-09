@@ -2,6 +2,7 @@ using AdSetIntegrador.Data.Entities;
 using AdSetIntegrador.Web.Models;
 using AdSetIntegrador.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace AdSetIntegrador.Web.Controllers
@@ -44,24 +45,34 @@ namespace AdSetIntegrador.Web.Controllers
 
         public IActionResult Edit(int id)
         {
-            var vehicle = new Vehicle();
+            var vehicle = _vehicleService.GetVehicleById(id);
             if (vehicle == null)
-            {
                 return NotFound();
-            }
+
             ViewBag.Action = "Edit";
+            ViewBag.OptionalFeatures = _vehicleService.GetOptionalFeatures();
             return View("Edit", vehicle);
         }
 
         [HttpPost]
-        public IActionResult Edit(Vehicle vehicle)
+        public IActionResult Edit(Vehicle vehicle, int[] selectedOptionalFeatures, ICollection<IFormFile> images)
         {
             if (ModelState.IsValid)
             {
+                _vehicleService.EditVehicle(vehicle, selectedOptionalFeatures, images);
                 return RedirectToAction("Index");
             }
             ViewBag.Action = "Edit";
+            ViewBag.OptionalFeatures = _vehicleService.GetOptionalFeatures();
             return View("Edit", vehicle);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            _vehicleService.DeleteVehicle(id);
+            ViewBag.OptionalFeatures = _vehicleService.GetOptionalFeatures();
+            return RedirectToAction("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
