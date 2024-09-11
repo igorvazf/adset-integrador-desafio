@@ -77,7 +77,7 @@ namespace AdSetIntegrador.Web.Services
                 query = query.Where(q => q.Model.Contains(filter.Model));
 
             if (filter.YearMin.HasValue)
-                query = query.Where(q => q.Year >= filter.YearMax.Value);
+                query = query.Where(q => q.Year >= filter.YearMin.Value);
 
             if (filter.YearMax.HasValue)
                 query = query.Where(q => q.Year <= filter.YearMax.Value);
