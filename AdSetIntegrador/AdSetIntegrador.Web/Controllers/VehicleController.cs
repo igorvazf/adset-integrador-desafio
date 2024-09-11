@@ -1,6 +1,9 @@
 using AdSetIntegrador.Data.Entities;
 using AdSetIntegrador.Web.Models;
+using AdSetIntegrador.Web.Models.Enums;
+using AdSetIntegrador.Web.Models.Filters;
 using AdSetIntegrador.Web.Services;
+using AdSetIntegrador.Web.Utils;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using System.Diagnostics;
@@ -18,15 +21,22 @@ namespace AdSetIntegrador.Web.Controllers
 
         public IActionResult Index()
         {
-            var model = _vehicleService.GetVehicles();
-            ViewBag.OptionalFeatures = _vehicleService.GetOptionalFeatures();
+            var model = _vehicleService.GetVehiclesList();
+            InitializeProperties();
             return View(model);
+        }
+
+        public IActionResult GetFilteredVehicles(VehicleFilter filter)
+        {
+            var vehicles = _vehicleService.GetFilteredVehicles(filter);
+
+            return PartialView("List", vehicles);
         }
 
         public IActionResult Create()
         {
             ViewBag.Action = "Create";
-            ViewBag.OptionalFeatures = _vehicleService.GetOptionalFeatures();
+            InitializeProperties();
             return View("Edit", new Vehicle());
         }
 
@@ -39,7 +49,7 @@ namespace AdSetIntegrador.Web.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.Action = "Create";
-            ViewBag.OptionalFeatures = _vehicleService.GetOptionalFeatures();
+            InitializeProperties();
             return View("Edit", vehicle);
         }
 
@@ -50,7 +60,7 @@ namespace AdSetIntegrador.Web.Controllers
                 return NotFound();
 
             ViewBag.Action = "Edit";
-            ViewBag.OptionalFeatures = _vehicleService.GetOptionalFeatures();
+            InitializeProperties();
             return View("Edit", vehicle);
         }
 
@@ -63,7 +73,7 @@ namespace AdSetIntegrador.Web.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.Action = "Edit";
-            ViewBag.OptionalFeatures = _vehicleService.GetOptionalFeatures();
+            InitializeProperties();
             return View("Edit", vehicle);
         }
 
@@ -71,13 +81,13 @@ namespace AdSetIntegrador.Web.Controllers
         public IActionResult Delete(int id)
         {
             _vehicleService.DeleteVehicle(id);
-            ViewBag.OptionalFeatures = _vehicleService.GetOptionalFeatures();
+            InitializeProperties();
             return RedirectToAction("Index");
         }
 
         public IActionResult ExportToExcel()
         {
-            var vehicles = _vehicleService.GetVehicles();
+            var vehicles = _vehicleService.GetVehiclesList();
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (var package = new ExcelPackage())
@@ -117,6 +127,29 @@ namespace AdSetIntegrador.Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private void InitializeProperties()
+        {
+            var priceRanges = Enum.GetValues(typeof(PriceRange))
+                           .Cast<PriceRange>()
+                           .Select(e => new
+                           {
+                               Value = (int)e,
+                               Text = EnumHelper.GetEnumDisplayName(e)
+                           }).ToList();
+
+            var photoOptions = Enum.GetValues(typeof(PhotoFilter))
+                           .Cast<PhotoFilter>()
+                           .Select(e => new
+                           {
+                               Value = (int)e,
+                               Text = EnumHelper.GetEnumDisplayName(e)
+                           }).ToList();
+
+            ViewBag.PriceRanges = priceRanges;
+            ViewBag.PhotoOptions = photoOptions;
+            ViewBag.OptionalFeatures = _vehicleService.GetOptionalFeatures();
         }
     }
 }

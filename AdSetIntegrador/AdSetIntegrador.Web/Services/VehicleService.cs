@@ -1,5 +1,7 @@
 ﻿using AdSetIntegrador.Data.Context;
 using AdSetIntegrador.Data.Entities;
+using AdSetIntegrador.Web.Models.Enums;
+using AdSetIntegrador.Web.Models.Filters;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdSetIntegrador.Web.Services
@@ -15,20 +17,14 @@ namespace AdSetIntegrador.Web.Services
             _photosPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photos");
         }
 
-        public List<OptionalFeature> GetOptionalFeatures()
-        {
-            return _context.OptionalFeatures.ToList();
-        }
+        public List<OptionalFeature> GetOptionalFeatures() =>
+            _context.OptionalFeatures.ToList();
 
-        public List<Vehicle> GetVehicles()
-        {
-            return _context.Vehicles.Include(v => v.Images).Include(v => v.VehicleOptionalFeatures).ToList();
-        }
+        public List<Vehicle> GetVehiclesList() =>
+            GetVehicles().ToList();
 
-        public Vehicle? GetVehicleById(int id)
-        {
-            return _context.Vehicles.Include(v => v.Images).Include(v => v.VehicleOptionalFeatures).FirstOrDefault(v => v.Id == id);
-        }
+        public Vehicle? GetVehicleById(int id) =>
+            GetVehicles().FirstOrDefault(v => v.Id == id);
 
         public void AddVehicle(Vehicle vehicle, int[] selectedOptionalFeatures, ICollection<IFormFile> images)
         {
@@ -65,6 +61,55 @@ namespace AdSetIntegrador.Web.Services
             DeleteVehicleImages(vehicle);
             _context.Vehicles.Remove(vehicle);
             _context.SaveChanges();
+        }
+
+        public IEnumerable<Vehicle> GetFilteredVehicles(VehicleFilter filter)
+        {
+            var query = GetVehicles();
+
+            if (!string.IsNullOrEmpty(filter.Plate))
+                query = query.Where(q => q.Plate.Contains(filter.Plate));
+
+            if (!string.IsNullOrEmpty(filter.Brand))
+                query = query.Where(q => q.Brand.Contains(filter.Brand));
+
+            if (!string.IsNullOrEmpty(filter.Model))
+                query = query.Where(q => q.Model.Contains(filter.Model));
+
+            if (filter.YearMin.HasValue)
+                query = query.Where(q => q.Year >= filter.YearMax.Value);
+
+            if (filter.YearMax.HasValue)
+                query = query.Where(q => q.Year <= filter.YearMax.Value);
+
+            if (filter.PriceRange.HasValue)
+            {
+                query = query.Where(q =>
+                            filter.PriceRange == (int)PriceRange.From10To50K ? q.Price >= 10000 && q.Price <= 50000 :
+                            filter.PriceRange == (int)PriceRange.From50To90K ? q.Price >= 50000 && q.Price <= 90000 :
+                            q.Price >= 90000); //PriceRange.Above90K
+            }
+
+            if (filter.Photos.HasValue)
+            {
+                query = query.Where(q =>
+                            filter.Photos == (int)PhotoFilter.WithPhotos ? q.Images.Count() > 0 :
+                            q.Images.Count() == 0); //PhotoFilter.WithoutPhotos
+            }
+
+            if (filter.Optional.HasValue)
+                query = query.Where(q => q.VehicleOptionalFeatures.Select(of => of.Id).Contains(filter.Optional.Value));
+
+            if (!string.IsNullOrEmpty(filter.Color))
+                query = query.Where(q => q.Color == filter.Color);
+
+            return query.ToList();
+        }
+
+        #region Private Methods
+        private IQueryable<Vehicle> GetVehicles()
+        {
+            return _context.Vehicles.Include(v => v.Images).Include(v => v.VehicleOptionalFeatures);
         }
 
         private void UpdateVehicleInfo(Vehicle vehicleDb, Vehicle updatedVehicle)
@@ -151,5 +196,6 @@ namespace AdSetIntegrador.Web.Services
 
             _context.VehicleImages.RemoveRange(vehicleImages);
         }
+        #endregion
     }
 }

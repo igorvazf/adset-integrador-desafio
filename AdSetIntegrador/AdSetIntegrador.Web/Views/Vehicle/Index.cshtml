@@ -102,9 +102,10 @@
                 <label class="filter-label" for="Price">Preço</label>
                 <select class="filter-dropdown" id="filter-price">
                     <option value="">Todos</option>
-                    <option value="1">10mil a 50mil</option>
-                    <option value="2">50mil a 90mil</option>
-                    <option value="3">+90mil</option>
+                    @foreach (var range in ViewBag.PriceRanges)
+                    {
+                        <option value="@range.Value">@range.Text</option>
+                    }
                 </select>
             </div>
 
@@ -112,8 +113,10 @@
                 <label class="filter-label" for="Images">Fotos</label>
                 <select class="filter-dropdown" id="filter-photos">
                     <option value="">Todos</option>
-                    <option value="WithPhotos">Com Fotos</option>
-                    <option value="WithoutPhotos">Sem Fotos</option>
+                    @foreach (var range in ViewBag.PhotoOptions)
+                    {
+                        <option value="@range.Value">@range.Text</option>
+                    }
                 </select>
             </div>
 
@@ -193,125 +196,9 @@
     </div>
 </div>
 <div id="list-vehicles">
-    @if (vehiclesTotal > 0)
+    @if (Model.Any())
     {
-        @foreach (var vehicle in Model)
-        {
-            <div id="vehicle-div"
-                data-plate="@vehicle.Plate"
-                data-brand="@vehicle.Brand"
-                data-model="@vehicle.Model"
-                data-year="@vehicle.Year"
-                data-price="@vehicle.Price"
-                data-photos="@(vehicle.Images.Count > 0)"
-                data-color="@vehicle.Color"
-                data-optionalfeatures="@string.Join(",", vehicle.VehicleOptionalFeatures.Select(of => of.OptionalFeatureId))"
-            >
-                <div style="display: flex; align-items: center;">
-
-                    <div class="rectangle">
-                        <a href="#" class="delete-link" data-vehicle-id="@vehicle.Id">
-                            <img src="~/images/trash.png" title="Excluir"/>
-                        </a>
-                    </div>
-
-                    @if (vehicle.Images.Count > 0)
-                    {
-                        <div>
-                            <img src="photos/@vehicle.Images.Select(v => v.ImageName).First()" class="vehicle-photo" />
-                        </div>
-                    }
-                    else
-                    {
-                        <div>
-                            <img src="photos/cardraw.png" class="vehicle-photo" />
-                        </div>
-                    }
-
-                    <div class="vehicle-item" >
-                        <div style="flex-direction: column;">
-                            <div class="vehicle-info-brand vehicle-info-title">
-                                @vehicle.Brand @vehicle.Model | @vehicle.Year
-                            </div>
-
-                            <div>
-                                <p class="vehicle-info-text">Placa -<span class="vehicle-info-text" style="color: #40A52B;">@vehicle.Plate</span></p>
-                                <p class="vehicle-info-text">Km -<span class="vehicle-info-text" style="color: #40A52B;">@vehicle.Mileage</span></p>
-                                <p class="vehicle-info-text">Cor -<span class="vehicle-info-text" style="color: #40A52B;">@vehicle.Color</span></p>
-                            </div>
-                        </div>
-
-                        <div class="vehicle-info-right">
-                            <div class="vehicle-price vehicle-price-text">R$ @vehicle.Price</div>
-                            <div class="additional-info">
-                                <div class="vehicle-edit">
-                                    <a asp-controller="Vehicle" asp-action="Edit" asp-route-id="@vehicle.Id">
-                                        <img src="~/images/edit.png" title="Editar veículo"/>
-                                    </a>
-                                </div>
-                                <div style="margin-left: 5px; flex-direction: column;">
-                                    <div>
-                                        <img src="~/images/camera.png" title="Fotos" />
-                                    </div>
-                                    <div>
-                                        @vehicle.Images.Count()
-                                    </div>
-                                </div>
-                                <div style="margin-left: 5px; flex-direction: column;">
-                                    <div>
-                                        <img src="~/images/car-opt.png" title="Opcionais" />
-                                    </div>
-                                    <div>
-                                        @vehicle.VehicleOptionalFeatures.Count()
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="integration" style="margin-left: 9px;">
-                        <small class="text-integration">Diamante Feirão</small>
-                        <div class="checkbox-group-idx">
-                            <input type="checkbox" class="radio" name="@vehicle.Id"/>
-                            <label class="text-integration" style="margin-bottom: 0; color: red;">010</label>&nbsp;
-                            <label class="text-integration" style="margin-bottom: 0;">-</label>&nbsp;
-                            <label class="text-integration" style="margin-bottom: 0; color: #40A52B;">008</label>
-                        </div>
-
-                        <small class="text-integration">Diamante</small>
-                        <div class="checkbox-group-idx">
-                            <input type="checkbox" class="radio" name="@vehicle.Id" />
-                            <label class="text-integration" style="margin-bottom: 0; color: red;">030</label>&nbsp;
-                            <label class="text-integration" style="margin-bottom: 0;">-</label>&nbsp;
-                            <label class="text-integration" style="margin-bottom: 0; color: #40A52B;">025</label>
-                        </div>
-
-                        <small class="text-integration">Platinum</small>
-                        <div class="checkbox-group-idx">
-                            <input type="checkbox" class="radio" name="@vehicle.Id" />
-                            <label class="text-integration" style="margin-bottom: 0; color: red;">040</label>&nbsp;
-                            <label class="text-integration" style="margin-bottom: 0;">-</label>&nbsp;
-                            <label class="text-integration" style="margin-bottom: 0; color: #40A52B;">010</label>
-                        </div>
-                    </div>
-
-                    <div><img src="images/vertical-line3.png" /></div>
-
-                    <div class="integration">
-                        <small class="text-integration">Básico</small>
-                        <div class="checkbox-group-idx">
-                            <input type="checkbox" />
-                            <label class="text-integration" style="margin-bottom: 0; color: red;">030</label>&nbsp;
-                            <label class="text-integration" style="margin-bottom: 0;">-</label>&nbsp;
-                            <label class="text-integration" style="margin-bottom: 0; color: #40A52B;">025</label>
-                        </div>
-                    </div>
-
-                    <div><img src="images/vertical-line3.png" /></div>
-                </div>
-                <hr class="dotted-hr" />
-            </div>
-        }
+        @Html.Partial("List", Model)
     }
     else
     {
@@ -328,88 +215,54 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
+    let vehicles, currentPage, itemsPerPage, totalPages;
+    const vehiclesContainer = document.getElementById('list-vehicles');
+    const itemsPerPageDropdown = document.getElementById('filter-show');
+    const pagination = document.getElementById('pagination');
+    const prevPageButton = document.getElementById('prev-page');
+    const nextPageButton = document.getElementById('next-page');
+    const pageNumbersContainer = document.getElementById('page-numbers');
+
     document.getElementById('filter-year-min').addEventListener('change', validateYears);
     document.getElementById('filter-year-max').addEventListener('change', validateYears);
+    document.addEventListener('DOMContentLoaded', initializePagination);
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const vehiclesContainer = document.getElementById('list-vehicles');
-        const itemsPerPageDropdown = document.getElementById('filter-show');
-        const pagination = document.getElementById('pagination');
-        const prevPageButton = document.getElementById('prev-page');
-        const nextPageButton = document.getElementById('next-page');
-        const pageNumbersContainer = document.getElementById('page-numbers');
+    $(document).ready(function () {
+        $('#filterButton').on('click', function () {
+            var plate = $('#filter-plate').val();
+            var brand = $('#filter-brand').val();
+            var model = $('#filter-model').val();
+            var yearMin = $('#filter-year-min').val();
+            var yearMax = $('#filter-year-max').val();
+            var price = $('#filter-price').val();
+            var photos = $('#filter-photos').val();
+            var optional = $('#filter-optional').val();
+            var color = $('#filter-color').val();
 
-        let vehicles = Array.from(vehiclesContainer.children);
-        let currentPage = 1;
-        let itemsPerPage = parseInt(itemsPerPageDropdown.value);
-        let totalPages = Math.ceil(vehicles.length / itemsPerPage);
-
-        function updatePage() {
-            vehicles.forEach((vehicle, index) => {
-                vehicle.style.display = (index >= (currentPage - 1) * itemsPerPage && index < currentPage * itemsPerPage) ? 'block' : 'none';
-            });
-
-            updatePaginationControls();
-        }
-
-        function updatePaginationControls() {
-            pageNumbersContainer.innerHTML = '';
-            for (let i = 1; i <= totalPages; i++) {
-                const pageNumber = document.createElement('span');
-                pageNumber.textContent = i;
-                pageNumber.className = 'page-number';
-                pageNumber.style.cursor = 'pointer';
-                if (i === currentPage) {
-                    pageNumber.style.fontWeight = 'bold';
+            $.ajax({
+                url: '@Url.Action("GetFilteredVehicles", "Vehicle")',
+                type: 'GET',
+                data: {
+                    Plate: plate,
+                    Brand: brand,
+                    Model: model,
+                    YearMin: yearMin,
+                    YearMax: yearMax,
+                    PriceRange: price,
+                    Photos: photos,
+                    Optional: optional,
+                    Color: color
+                },
+                success: function (response) {
+                    $('#list-vehicles').html(response);
+                    initializePagination();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
                 }
-                pageNumber.addEventListener('click', () => {
-                    currentPage = i;
-                    updatePage();
-                });
-                pageNumbersContainer.appendChild(pageNumber);
-            }
-
-            prevPageButton.disabled = currentPage === 1;
-            nextPageButton.disabled = currentPage === totalPages;
-        }
-
-        function changeItemsPerPage() {
-            itemsPerPage = parseInt(itemsPerPageDropdown.value);
-            totalPages = Math.ceil(vehicles.length / itemsPerPage);
-            currentPage = 1;
-            updatePage();
-        }
-
-        function prevPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                updatePage();
-            }
-        }
-
-        function nextPage() {
-            if (currentPage < totalPages) {
-                currentPage++;
-                updatePage();
-            }
-        }
-
-        itemsPerPageDropdown.addEventListener('change', changeItemsPerPage);
-        prevPageButton.addEventListener('click', prevPage);
-        nextPageButton.addEventListener('click', nextPage);
-
-        updatePage();
+            });
+        });
     });
-
-    function validateYears() {
-        const minYear = parseInt(document.getElementById('filter-year-min').value, 10);
-        const maxYear = parseInt(document.getElementById('filter-year-max').value, 10);
-
-        if (!isNaN(minYear) && !isNaN(maxYear) && minYear > maxYear) {
-            alert('O Ano Min não pode ser maior do que o Ano Max.');
-            document.getElementById('filter-year-min').value = '';
-        }
-    }
 
     $("input:checkbox").on('click', function () {
         var $box = $(this);
@@ -422,76 +275,76 @@
         }
     });
 
-    document.getElementById('filterButton').addEventListener('click', function () {
-        const plate = document.getElementById('filter-plate').value.toLowerCase();
-        const brand = document.getElementById('filter-brand').value.toLowerCase();
-        const model = document.getElementById('filter-model').value.toLowerCase();
-        const yearMin = document.getElementById('filter-year-min').value;
-        const yearMax = document.getElementById('filter-year-max').value;
-        const priceRange = document.getElementById('filter-price').value;
-        const color = document.getElementById('filter-color').value.toLowerCase();
-        const photosFilter = document.getElementById('filter-photos').value;
-        const optionalFeature = document.getElementById('filter-optional').value;
+    function validateYears() {
+        const minYear = parseInt(document.getElementById('filter-year-min').value, 10);
+        const maxYear = parseInt(document.getElementById('filter-year-max').value, 10);
 
-        document.querySelectorAll('#vehicle-div').forEach(vehicle => {
-            const vehiclePlate = vehicle.getAttribute('data-plate').toLowerCase();
-            const vehicleBrand = vehicle.getAttribute('data-brand').toLowerCase();
-            const vehicleModel = vehicle.getAttribute('data-model').toLowerCase();
-            const vehicleYear = parseInt(vehicle.getAttribute('data-year'));
-            const vehiclePrice = parseFloat(vehicle.getAttribute('data-price'));
-            const vehicleColor = vehicle.getAttribute('data-color').toLowerCase();
-            const vehicleHasPhotos = vehicle.getAttribute('data-photos') === 'True';
-            const vehicleOptionalFeatures = vehicle.getAttribute('data-optionalfeatures').split(',');
+        if (!isNaN(minYear) && !isNaN(maxYear) && minYear > maxYear) {
+            alert('O Ano Min não pode ser maior do que o Ano Max.');
+            document.getElementById('filter-year-min').value = '';
+        }
+    }
 
-            let matchesFilters = true;
+    function initializePagination() {
+        vehicles = Array.from(vehiclesContainer.children);
+        currentPage = 1;
+        itemsPerPage = parseInt(itemsPerPageDropdown.value);
+        totalPages = Math.ceil(vehicles.length / itemsPerPage);
 
-            if (plate && !vehiclePlate.includes(plate)) {
-                matchesFilters = false;
-            }
+        itemsPerPageDropdown.addEventListener('change', changeItemsPerPage);
+        prevPageButton.addEventListener('click', prevPage);
+        nextPageButton.addEventListener('click', nextPage);
 
-            if (brand && !vehicleBrand.includes(brand)) {
-                matchesFilters = false;
-            }
+        updatePage();
+    }
 
-            if (model && !vehicleModel.includes(model)) {
-                matchesFilters = false;
-            }
+    function changeItemsPerPage() {
+        itemsPerPage = parseInt(itemsPerPageDropdown.value);
+        totalPages = Math.ceil(vehicles.length / itemsPerPage);
+        currentPage = 1;
+        updatePage();
+    }
 
-            if (yearMin && vehicleYear < parseInt(yearMin)) {
-                matchesFilters = false;
-            }
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            updatePage();
+        }
+    }
 
-            if (yearMax && vehicleYear > parseInt(yearMax)) {
-                matchesFilters = false;
-            }
+    function nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            updatePage();
+        }
+    }
 
-            if (priceRange) {
-                if (priceRange === '1' && (vehiclePrice < 10000 || vehiclePrice > 50000)) {
-                    matchesFilters = false;
-                } else if (priceRange === '2' && (vehiclePrice < 50000 || vehiclePrice > 90000)) {
-                    matchesFilters = false;
-                } else if (priceRange === '3' && vehiclePrice < 90000) {
-                    matchesFilters = false;
-                }
-            }
-
-            if (color && !vehicleColor.includes(color)) {
-                matchesFilters = false;
-            }
-
-            if (photosFilter) {
-                if (photosFilter === 'WithPhotos' && !vehicleHasPhotos) {
-                    matchesFilters = false;
-                } else if (photosFilter === 'WithoutPhotos' && vehicleHasPhotos) {
-                    matchesFilters = false;
-                }
-            }
-
-            if (optionalFeature && !vehicleOptionalFeatures.includes(optionalFeature)) {
-                matchesFilters = false;
-            }
-
-            vehicle.style.display = matchesFilters ? '' : 'none';
+    function updatePage() {
+        vehicles.forEach((vehicle, index) => {
+            vehicle.style.display = (index >= (currentPage - 1) * itemsPerPage && index < currentPage * itemsPerPage) ? 'block' : 'none';
         });
-    });
+
+        updatePaginationControls();
+    }
+
+    function updatePaginationControls() {
+        pageNumbersContainer.innerHTML = '';
+        for (let i = 1; i <= totalPages; i++) {
+            const pageNumber = document.createElement('span');
+            pageNumber.textContent = i;
+            pageNumber.className = 'page-number';
+            pageNumber.style.cursor = 'pointer';
+            if (i === currentPage) {
+                pageNumber.style.fontWeight = 'bold';
+            }
+            pageNumber.addEventListener('click', () => {
+                currentPage = i;
+                updatePage();
+            });
+            pageNumbersContainer.appendChild(pageNumber);
+        }
+
+        prevPageButton.disabled = currentPage === 1;
+        nextPageButton.disabled = currentPage === totalPages;
+    }
 </script>
