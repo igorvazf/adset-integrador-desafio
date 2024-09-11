@@ -262,6 +262,21 @@
                 }
             });
         });
+
+        $(document).on('click', '.delete-link', function (e) {
+            e.preventDefault();
+            var vehicleId = $(this).data('vehicle-id');
+            showConfirmationModal(vehicleId);
+        });
+
+        $(document).on('click', '#cancelBtn', function () {
+            $('#confirmationModal').hide();
+        });
+
+        $(window).on('click', function (event) {
+            if ($(event.target).is('#confirmationModal'))
+                $('#confirmationModal').hide();
+        });
     });
 
     $("input:checkbox").on('click', function () {
@@ -346,5 +361,12 @@
 
         prevPageButton.disabled = currentPage === 1;
         nextPageButton.disabled = currentPage === totalPages;
+    }
+
+    function showConfirmationModal(vehicleId) {
+        var deleteForm = $('#deleteForm');
+        deleteForm.attr('action', '@Url.Action("Delete", "Vehicle")');
+        deleteForm.find('input[name="id"]').val(vehicleId);
+        $('#confirmationModal').show();
     }
 </script>
